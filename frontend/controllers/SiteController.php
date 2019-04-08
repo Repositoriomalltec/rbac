@@ -74,15 +74,15 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        \yii\helpers\VarDumper::dump(Yii::$app->Permission->getPermission(), 10, true);
-        die();
+       // \yii\helpers\VarDumper::dump(Yii::$app->Permission->getPermission(), 10, true);
+        //die();
         return $this->render('index');
     }
 
     public function actionPermission() {
-        \yii\helpers\VarDumper::dump(Yii::$app->Permission->getPermission(), 10, true);
-        die();
-        die('maria');
+       // \yii\helpers\VarDumper::dump(Yii::$app->Permission->getPermission(), 10, true);
+        //die();
+        //die('maria');
     }
 
     /**
