@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\SearchAuthRule */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Auth Rules';
+$this->title = 'Itens de Autenticação';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="auth-rule-index">
@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Auth Rule', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php 
+    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

@@ -13,9 +13,9 @@ return [
     'homeUrl'=>'/rbac',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
-        'Permission' => [
-            'class' =>  'common\components\ModulesPermission',
-      ],
+        //'Permission' => [
+           // 'class' =>  'common\components\ModulesPermission',
+      //],
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'baseUrl'=>'/rbac',

@@ -3,11 +3,12 @@
 namespace common\modules\rbac\controllers;
 
 use Yii;
-use common\models\AuthItem;
-use common\models\SearchAuthItem;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\helpers\VarDumper;
+use common\models\AuthItem;
 use yii\filters\VerbFilter;
+use common\models\SearchAuthItem;
+use yii\web\NotFoundHttpException;
 
 /**
  * AuthItemController implements the CRUD actions for AuthItem model.
@@ -69,7 +70,8 @@ class AuthItemController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->name]);
         }
-
+       // VarDumper::dump( $model->errors, $depth = 10, $highlight = true);
+       // die();
         return $this->render('create', [
             'model' => $model,
         ]);

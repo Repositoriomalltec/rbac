@@ -2,19 +2,20 @@
 
 namespace frontend\controllers;
 
-use frontend\models\ResendVerificationEmailForm;
-use frontend\models\VerifyEmailForm;
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\helpers\VarDumper;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
+use yii\filters\AccessControl;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\VerifyEmailForm;
+use yii\web\BadRequestHttpException;
+use frontend\models\ResetPasswordForm;
+use yii\base\InvalidArgumentException;
+use frontend\models\PasswordResetRequestForm;
+use frontend\models\ResendVerificationEmailForm;
 
 /**
  * Site controller
@@ -24,7 +25,7 @@ class SiteController extends Controller {
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
+/*     public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::classname(),
@@ -42,16 +43,40 @@ class SiteController extends Controller {
                 ],
             ],
         ];
+    } */
+    public function behaviors(){
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error','about','index','contact','signup','login', 'permission', 'criar-permissao'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['logout', 'index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
     }
 
-    public function beforeAction($event) {
+/*     public function beforeAction($event) {
         if (Yii::$app->Permission->getPermission()){
             return parent::beforeAction($event);
         }else{
             //die('Parou aqui');
             return $this->redirect(['site/permission']);
         }
-    }
+    } */
 
     /**
      * {@inheritdoc}
@@ -67,7 +92,7 @@ class SiteController extends Controller {
             ],
         ];
     }
-
+   
     /**
      * Displays homepage.
      *
@@ -76,10 +101,65 @@ class SiteController extends Controller {
     public function actionIndex() {
        // \yii\helpers\VarDumper::dump(Yii::$app->Permission->getPermission(), 10, true);
         //die();
+/* 
+        $auth = Yii::$app->authManager;
+
+        //Definir os papeis (Grupos Admin, supervisor, operador)
+        $admin = $auth->createRole('administrador');
+        $supervisor = $auth->createRole('supervisor');
+        $operador = $auth->createRole('operador');
+
+        //Add os grupos para o authmanager
+        $auth->add($admin);
+        $auth->add($supervisor);
+        $auth->add($operador);
+ 
+        // Mapear rotas
+        $viewPost = $auth->createPermission('viewPost');
+        $readPost = $auth->createPermission('readPost');
+        $updatePost = $auth->createPermission('updatePost');
+        $deletePost = $auth->createPermission('deletePost');
+
+        //Add rotas para authmanager
+        $auth->add($viewPost);
+        $auth->add($readPost);
+        $auth->add($updatePost);
+        $auth->add($deletePost);
+
+        //Dar permissão para o grupo
+        // Grupo ADMIN pode ver tudo.
+        $auth->addChild($admin, $viewPost);
+        $auth->addChild($admin, $readPost);
+        $auth->addChild($admin, $updatePost);
+        $auth->addChild($admin, $deletePost);
+
+        //Grupo Supervidor
+        $auth->addChild($supervisor, $viewPost);
+        $auth->addChild($supervisor, $readPost);
+        $auth->addChild($supervisor, $updatePost);
+
+        //Grupo Operador
+        $auth->addChild($operador, $viewPost);
+        $auth->addChild($operador, $readPost);
+        $auth->addChild($operador, $updatePost);
+
+        //Definir qual usuário é de tal grupo
+        $auth->assign($admin,1); 
+        $auth->assign($supervisor,2); 
+        $auth->assign($operador,3);   */
+
         return $this->render('index');
     }
 
     public function actionPermission() {
+        $usuaId = Yii::$app->user->identity->id;
+        $authM = Yii::$app->authManager;
+        VarDumper::dump(Yii::$app->user->can('updatePost'), 10, true);
+        echo "<p> viewPost {$authM->checkAccess($usuaId, 'viewPost')}</p>";
+        echo "<p> readPost {$authM->checkAccess($usuaId, 'readPost')}</p>";
+        echo "<p> updatePost {$authM->checkAccess($usuaId, 'updatePost')}</p>";
+        echo "<p> deletePost {$authM->checkAccess($usuaId, 'deletePost')}</p>";
+        echo "<p> report-aderencia {$authM->checkAccess($usuaId, 'report-aderencia')}</p>";
        // \yii\helpers\VarDumper::dump(Yii::$app->Permission->getPermission(), 10, true);
         //die();
         //die('maria');
